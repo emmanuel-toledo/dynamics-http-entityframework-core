@@ -1,4 +1,4 @@
-﻿using Dynamics.Http.EntityFramework.Core.Design.AnnotationAttributes;
+﻿using Dynamics.Http.EntityFramework.Core.Annotations;
 
 namespace Dynamics.Http.EntityFramework.Core.Infraestructure.Builder
 {
@@ -10,12 +10,12 @@ namespace Dynamics.Http.EntityFramework.Core.Infraestructure.Builder
         /// <summary>
         /// Entity model attributes definitions.
         /// </summary>
-        private EntityAttributes? _entityAttributes { get; set; }
+        internal EntityAttribute? EntityAttributes { get; set; }
 
         /// <summary>
         /// List of entity fields attributes definitions.
         /// </summary>
-        private ICollection<ColumnAttributes> _fieldAttributes { get; set; } = new HashSet<ColumnAttributes>();
+        internal ICollection<ColumnAttribute> ColumnAttributes { get; set; } = new HashSet<ColumnAttribute>();
 
         /// <summary>
         /// Get entity builder unique identifier.
@@ -45,10 +45,10 @@ namespace Dynamics.Http.EntityFramework.Core.Infraestructure.Builder
         /// <exception cref="NullReferenceException">The entity attribues were not defined.</exception>
         private void ExtractEntityAttributes()
         {
-            var entityAttributes = EntityType.GetCustomAttributes(typeof(EntityAttributes), true).FirstOrDefault() as EntityAttributes;
+            var entityAttributes = EntityType.GetCustomAttributes(typeof(EntityAttribute), true).FirstOrDefault() as EntityAttribute;
             if (entityAttributes is null)
                 throw new NullReferenceException($"The entity attributes definitions in class {EntityType.Name} is null.");
-            _entityAttributes = entityAttributes;
+            EntityAttributes = entityAttributes;
         }
 
         /// <summary>
@@ -61,10 +61,10 @@ namespace Dynamics.Http.EntityFramework.Core.Infraestructure.Builder
                 return;
             foreach (var property in properties)
             {
-                var fieldAttributes = property.GetCustomAttributes(typeof(ColumnAttributes), true).FirstOrDefault() as ColumnAttributes;
-                if (fieldAttributes is null)
+                var columnAttributes = property.GetCustomAttributes(typeof(ColumnAttribute), true).FirstOrDefault() as ColumnAttribute;
+                if (columnAttributes is null)
                     return;
-                _fieldAttributes.Add(fieldAttributes);
+                ColumnAttributes.Add(columnAttributes);
             }
         }
     }

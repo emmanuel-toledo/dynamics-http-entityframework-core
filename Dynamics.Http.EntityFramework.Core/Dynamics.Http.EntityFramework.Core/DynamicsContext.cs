@@ -1,5 +1,7 @@
-﻿using Dynamics.Http.EntityFramework.Core.Infraestructure.Configuration.Context;
+﻿using Dynamics.Http.EntityFramework.Core.Business.Handlers;
+using Dynamics.Http.EntityFramework.Core.Infraestructure.Configuration.Context;
 using Dynamics.Http.EntityFramework.Core.Infraestructure.Connection;
+using Dynamics.Http.EntityFramework.Core.Microsoft.Extensions.DependencyInjection;
 using Dynamics.Http.EntityFramework.Core.Models.Generic;
 using Dynamics.Http.EntityFramework.Core.Persistence;
 using Newtonsoft.Json.Linq;
@@ -8,22 +10,41 @@ namespace Dynamics.Http.EntityFramework.Core
 {
     public class DynamicsContext : IDynamicsContext
     {
-        private readonly DynamicsConnection _connection;
+        private readonly IDynamicsQueriesHandler _queriesHandler;
 
-        private readonly DynamicsContextOptionsBuilder? _optionsBuilder;
-
-        public DynamicsContext(DynamicsConnection connection)
-            => _connection = connection;
-
-        public DynamicsContext(DynamicsConnection connection, DynamicsContextOptionsBuilder optionsBuilder)
+        public DynamicsContext(IDynamicsQueriesHandler queriesHandler)
         {
-            _connection = connection;
-            _optionsBuilder = optionsBuilder;
+            _queriesHandler = queriesHandler;
         }
 
-        public Task<Guid> Create(string entityNamme, JObject data)
+        //private readonly IHttpClientFactory _clientFactory;
+
+        //private readonly IDynamicsContextOptionsBuilder _optionsBuilder;
+
+        //public DynamicsContext(IHttpClientFactory clientFactory, IDynamicsContextOptionsBuilder optionsBuilder)
+        //{
+        //    _clientFactory = clientFactory;
+        //    _optionsBuilder = optionsBuilder;
+        //}
+
+        public async Task<HttpResponseMessage> SendQueryAsync(HttpRequestMessage requestMessage)
         {
-            throw new NotImplementedException();
+            if (requestMessage.Method != HttpMethod.Get)
+                throw new Exception("SendQueryAsync method must be only for get data");
+            return await _queriesHandler.SendRequestAsync(requestMessage);
+        }
+
+        public async Task<HttpResponseMessage> SendCommandAsync(HttpRequestMessage requestMessage)
+        {
+            if (requestMessage.Method == HttpMethod.Get)
+                throw new Exception("SendCommandAsync method must be only for set data");
+            return await _queriesHandler.SendRequestAsync(requestMessage);
+        }
+
+        public async Task<Guid> Create(string entityNamme, JObject data)
+        {
+            // TODO:
+            return Guid.NewGuid();
         }
 
         public Task<bool> Delete(string entityNamme, Guid id)
@@ -31,7 +52,7 @@ namespace Dynamics.Http.EntityFramework.Core
             throw new NotImplementedException();
         }
 
-        public Task<Entity?> RetriveById(string entityName, Guid id)
+        public async Task<Entity?> RetriveById(string entityName, Guid id)
         {
             throw new NotImplementedException();
         }
@@ -45,6 +66,8 @@ namespace Dynamics.Http.EntityFramework.Core
         {
             throw new NotImplementedException();
         }
+
+        
 
         public Task<bool> Update(string entityNamme, Guid id, JObject data)
         {

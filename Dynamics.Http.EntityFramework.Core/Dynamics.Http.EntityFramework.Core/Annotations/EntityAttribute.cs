@@ -1,9 +1,9 @@
-﻿namespace Dynamics.Http.EntityFramework.Core.Design.AnnotationAttributes
+﻿namespace Dynamics.Http.EntityFramework.Core.Annotations
 {
     /// <summary>
     /// This class contains the implementation of the custom attributes to use for an entity deffinition.
     /// </summary>
-    public class EntityAttributes : Attribute
+    public class EntityAttribute : Attribute
     {
         /// <summary>
         /// Get and set schema name of an entity.
@@ -20,7 +20,7 @@
         /// </summary>
         /// <param name="schemaName">Entity schema name.</param>
         /// <param name="logicalName">Entity logical name.</param>
-        public EntityAttributes(string schemaName, string logicalName)
+        public EntityAttribute(string schemaName, string logicalName)
         {
             SchemaName = schemaName;
             LogicalName = logicalName;
