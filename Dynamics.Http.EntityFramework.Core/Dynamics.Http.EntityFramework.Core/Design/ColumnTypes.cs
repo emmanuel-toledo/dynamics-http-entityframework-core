@@ -3,7 +3,7 @@
     /// <summary>
     /// Enums that contains the different Field Types that Dynamics CRM has.
     /// </summary>
-    public enum FieldTypes
+    public enum ColumnTypes
     {
         Text,
         Number,
@@ -11,6 +11,6 @@
         DateTime,
         OptionSet,
         BooleanOptionSet,
-        EntityUniqueIdentifier
+        UniqueIdentifier,
     }
 }

@@ -1,9 +1,11 @@
-﻿namespace Dynamics.Http.EntityFramework.Core.Design.AnnotationAttributes
+﻿using Dynamics.Http.EntityFramework.Core.Design;
+
+namespace Dynamics.Http.EntityFramework.Core.Annotations
 {
     /// <summary>
     /// This class contains the implementation of the custom attributes to use for an entity field deffinition.
     /// </summary>
-    public class ColumnAttributes : Attribute
+    public class ColumnAttribute : Attribute
     {
         /// <summary>
         /// Get and set entity Schema name.
@@ -18,7 +20,7 @@
         /// <summary>
         /// Get and set entity field type.
         /// </summary>
-        public FieldTypes FieldType { get; set; }
+        public ColumnTypes FieldType { get; set; }
 
         /// <summary>
         /// Initialize the entity field attributes for a class property.
@@ -26,7 +28,7 @@
         /// <param name="schemaName">Field schema name.</param>
         /// <param name="logicalName">Field logical name.</param>
         /// <param name="fieldType">Field type.</param>
-        public ColumnAttributes(string schemaName, string logicalName, FieldTypes fieldType)
+        public ColumnAttribute(string schemaName, string logicalName, ColumnTypes fieldType)
         {
             SchemaName = schemaName;
             LogicalName = logicalName;

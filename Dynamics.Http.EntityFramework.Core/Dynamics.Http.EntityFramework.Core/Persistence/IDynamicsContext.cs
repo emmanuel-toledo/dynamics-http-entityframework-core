@@ -1,4 +1,5 @@
-﻿using Dynamics.Http.EntityFramework.Core.Models.Generic;
+﻿using Dynamics.Http.EntityFramework.Core.Business.Handlers;
+using Dynamics.Http.EntityFramework.Core.Models.Generic;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,10 @@ namespace Dynamics.Http.EntityFramework.Core.Persistence
 {
     public interface IDynamicsContext
     {
+        Task<HttpResponseMessage> SendQueryAsync(HttpRequestMessage requestMessage);
+
+        Task<HttpResponseMessage> SendCommandAsync(HttpRequestMessage requestMessage);
+
         Task<Entity?> RetriveById(string entityName, Guid id);
 
         Task<ICollection<Entity>> RetriveQueryFetchXml(string entityName, string fetchXml);
